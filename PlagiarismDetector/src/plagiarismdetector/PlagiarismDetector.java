@@ -9,13 +9,12 @@ import java.util.Scanner;
 import Trie.Trie;
 
 public class PlagiarismDetector {
-    static String folderPath = "../textos"; //ruta de la carpeta
-
+    static String folderPath = "./textos"; //ruta de la carpeta
     static File folder = new File(folderPath); // indicamos la carpeta de archivos
     static File[] files = folder.listFiles(); // obtenemos los archivos de la carpeta
     static ArrayList<Trie> tries= new ArrayList<>(); //array de tries
     public static void main(String[] args) {
-        
+        loadFiles(files);
     }
     public static boolean loadFiles(File[] files){
         if (files != null) {
