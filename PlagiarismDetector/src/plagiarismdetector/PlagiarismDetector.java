@@ -15,6 +15,13 @@ public class PlagiarismDetector {
     static ArrayList<Trie> tries= new ArrayList<>(); //array de tries
     public static void main(String[] args) {
         loadFiles(files);
+        System.out.println(tries.get(0).search("constante"));
+        Scanner sc = new Scanner(System.in);
+        String textoIngresado = sc.nextLine();
+        ArrayList<Double> plagioDB = detectarPlagioPalabras(textoIngresado);
+        for(Double d : plagioDB){
+            System.out.println(d);
+        }
     }
     public static boolean loadFiles(File[] files){
         if (files != null) {
@@ -53,6 +60,24 @@ public class PlagiarismDetector {
             System.out.println("La carpeta no existe o no contiene archivos.");
             return false;
         }
+    }
+    // Devuelve un arreglo del porcentaje de similitud de cada texto de la DB
+    public static ArrayList<Double> detectarPlagioPalabras(String texto){
+        String[] palabrasText = texto.toLowerCase().split("\\W+");
+        int palabrasTotal = palabrasText.length;
+        ArrayList<Double> porcentPlagio = new ArrayList<>();
+        for(Trie t: tries){
+            double porcent = 0.0;
+            int cantPalabrasPlagio = 0;
+            for(String p: palabrasText){
+                if(t.search(p)){
+                    cantPalabrasPlagio++;
+                }
+            }
+            porcent = cantPalabrasPlagio * 100.0 / palabrasTotal;
+            porcentPlagio.add(porcent);
+        }
+        return porcentPlagio;
     }
     
     public ResultChecker verifyPlagiarism(String path){
