@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import Trie.Trie;
+import java.text.Normalizer;
 
 public class PlagiarismDetector {
     static String folderPath = "./textos"; //ruta de la carpeta
@@ -40,7 +41,7 @@ public class PlagiarismDetector {
                             String line = scanner.nextLine();
                             // filtamos los caracteres especiales y lo volvemos en minusculas
                             // cada palabra se queda guardado en un arreglo
-                            String[] words = line.toLowerCase().split("\\W+");
+                            String[] words = procesarTexto(line);
                             // introducimos cada palabra al Trie correspondiente
                             for(String word:words)
                                 tries.get(idxTries).insert(word);
@@ -61,9 +62,26 @@ public class PlagiarismDetector {
             return false;
         }
     }
+    
+    public static String[] procesarTexto(String str){
+        String normalizedText = Normalizer.normalize(str, Normalizer.Form.NFD);
+        // Eliminar caracteres diacríticos
+        normalizedText = normalizedText.replaceAll("\\p{M}", "");
+        // Reemplazar caracteres especiales con sus equivalentes
+        normalizedText = normalizedText.replaceAll("[á]", "a")
+                                       .replaceAll("[é]", "e")
+                                       .replaceAll("[í]", "i")
+                                       .replaceAll("[ó]", "o")
+                                       .replaceAll("[ú]", "u")
+                                       .replaceAll("ñ", "n");
+        // filtamos los caracteres especiales y lo volvemos en minusculas
+        // cada palabra se queda guardado en un arreglo
+        String[] words = normalizedText.toLowerCase().split("\\W+");
+        return words;
+    }
     // Devuelve un arreglo del porcentaje de similitud de cada texto de la DB
     public static ArrayList<Double> detectarPlagioPalabras(String texto){
-        String[] palabrasText = texto.toLowerCase().split("\\W+");
+        String[] palabrasText = procesarTexto(texto);
         int palabrasTotal = palabrasText.length;
         ArrayList<Double> porcentPlagio = new ArrayList<>();
         for(Trie t: tries){
@@ -71,6 +89,7 @@ public class PlagiarismDetector {
             int cantPalabrasPlagio = 0;
             for(String p: palabrasText){
                 if(t.search(p)){
+                    System.out.println(p);
                     cantPalabrasPlagio++;
                 }
             }
