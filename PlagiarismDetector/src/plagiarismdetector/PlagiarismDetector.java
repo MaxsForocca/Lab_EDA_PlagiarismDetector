@@ -67,13 +67,8 @@ public class PlagiarismDetector {
         String normalizedText = Normalizer.normalize(str, Normalizer.Form.NFD);
         // Eliminar caracteres diacríticos
         normalizedText = normalizedText.replaceAll("\\p{M}", "");
-        // Reemplazar caracteres especiales con sus equivalentes
-        normalizedText = normalizedText.replaceAll("[á]", "a")
-                                       .replaceAll("[é]", "e")
-                                       .replaceAll("[í]", "i")
-                                       .replaceAll("[ó]", "o")
-                                       .replaceAll("[ú]", "u")
-                                       .replaceAll("ñ", "n");
+        // Reemplazar caracteres especiales
+        normalizedText = normalizedText.replaceAll("ñ", "n");
         // filtamos los caracteres especiales y lo volvemos en minusculas
         // cada palabra se queda guardado en un arreglo
         String[] words = normalizedText.toLowerCase().split("\\W+");
