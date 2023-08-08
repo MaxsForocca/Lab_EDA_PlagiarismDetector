@@ -16,12 +16,12 @@ public class PlagiarismDetector {
     static ArrayList<Trie> tries= new ArrayList<>(); //array de tries
     public static void main(String[] args) {
         loadFiles(files);
-        System.out.println(tries.get(0).search("constante"));
         Scanner sc = new Scanner(System.in);
         String textoIngresado = sc.nextLine();
         ArrayList<Double> plagioDB = detectarPlagioPalabras(textoIngresado);
-        for(Double d : plagioDB){
-            System.out.println(d);
+        System.out.println("Detectar Plagio");
+        for(int i = 0; i< files.length; i++){
+            System.out.println(files[i].getName() +" -> "+plagioDB.get(i));
         }
     }
     public static boolean loadFiles(File[] files){
@@ -84,7 +84,6 @@ public class PlagiarismDetector {
             int cantPalabrasPlagio = 0;
             for(String p: palabrasText){
                 if(t.search(p)){
-                    System.out.println(p);
                     cantPalabrasPlagio++;
                 }
             }
